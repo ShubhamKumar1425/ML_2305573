@@ -39,3 +39,5 @@ if __name__ == "__main__":
 
     y_pred = x_new @ beta
     print("Predicted Y:", round(y_pred, 4))
+
+
