@@ -1,43 +1,55 @@
-import numpy as np
+# Step 0: User Input
+n = int(input("Enter number of data points: "))
 
-def train_multiple_linear_regression(X, y):
-    """
-    X: feature matrix (n_samples x n_features)
-    y: target vector
-    """
-    # Add bias (column of ones)
-    X = np.c_[np.ones(X.shape[0]), X]
+x1 = list(map(float, input("Enter x1 values (space separated): ").split()))
+x2 = list(map(float, input("Enter x2 values (space separated): ").split()))
+y  = list(map(float, input("Enter y values  (space separated): ").split()))
 
-    # Normal Equation
-    beta = np.linalg.inv(X.T @ X) @ X.T @ y
-    return beta
+# Validation
+if len(x1) != n or len(x2) != n or len(y) != n:
+    print("Error: Number of values must match n")
+    exit()
 
+# Step 1: Summations
+Sx1 = sum(x1)
+Sx2 = sum(x2)
+Sy  = sum(y)
 
-if __name__ == "__main__":
-    n = int(input("Enter number of samples: "))
-    m = int(input("Enter number of features: "))
+Sx1x1 = sum(i*i for i in x1)
+Sx2x2 = sum(i*i for i in x2)
 
-    print("Enter feature values row-wise:")
-    X = []
-    for _ in range(n):
-        X.append(list(map(float, input().split())))
+Sx1x2 = sum(x1[i] * x2[i] for i in range(n))
+Sx1y  = sum(x1[i] * y[i]  for i in range(n))
+Sx2y  = sum(x2[i] * y[i]  for i in range(n))
 
-    y = list(map(float, input("Enter Y values: ").split()))
+# Step 2: Determinants
+D = (n*(Sx1x1*Sx2x2 - Sx1x2**2)
+     - Sx1*(Sx1*Sx2x2 - Sx2*Sx1x2)
+     + Sx2*(Sx1*Sx1x2 - Sx1x1*Sx2))
 
-    X = np.array(X)
-    y = np.array(y)
+D0 = (Sy*(Sx1x1*Sx2x2 - Sx1x2**2)
+      - Sx1*(Sx1y*Sx2x2 - Sx2y*Sx1x2)
+      + Sx2*(Sx1y*Sx1x2 - Sx1x1*Sx2y))
 
-    beta = train_multiple_linear_regression(X, y)
+D1 = (n*(Sx1y*Sx2x2 - Sx2y*Sx1x2)
+      - Sy*(Sx1*Sx2x2 - Sx2*Sx1x2)
+      + Sx2*(Sx1*Sx2y - Sx1y*Sx2))
 
-    print("\nRegression Coefficients:")
-    for i, b in enumerate(beta):
-        print(f"b{i} = {b:.4f}")
+D2 = (n*(Sx1x1*Sx2y - Sx1y*Sx1x2)
+      - Sx1*(Sx1*Sx2y - Sx1y*Sx2)
+      + Sy*(Sx1*Sx1x2 - Sx1x1*Sx2))
 
-    print("\nEnter values to predict:")
-    x_new = list(map(float, input().split()))
-    x_new = np.array([1] + x_new)
+# Step 3: Coefficients
+b0 = D0 / D
+b1 = D1 / D
+b2 = D2 / D
 
-    y_pred = x_new @ beta
-    print("Predicted Y:", round(y_pred, 4))
+print("\nRegression Equation:")
+print(f"y = {b0:.4f} + {b1:.4f}*x1 + {b2:.4f}*x2")
 
+# Prediction
+new_x1 = float(input("\nEnter x1 for prediction: "))
+new_x2 = float(input("Enter x2 for prediction: "))
+y_pred = b0 + b1*new_x1 + b2*new_x2
 
+print(f"Predicted y = {y_pred:.4f}")
