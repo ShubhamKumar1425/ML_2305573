@@ -10,7 +10,6 @@ Decision Tree (ID3) – Human-Readable Version
 import math
 from collections import Counter, defaultdict
 
-
 # Calculate entropy of a list of class labels
 def entropy(labels):
     total = len(labels)
@@ -148,3 +147,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
