@@ -9,7 +9,6 @@ Naive Bayes Classifier - Categorical Data
 
 from collections import defaultdict
 
-
 def train_naive_bayes(data, labels):
     class_count = defaultdict(int)
     feature_count = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
@@ -77,3 +76,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
