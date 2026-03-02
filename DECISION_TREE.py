@@ -144,7 +144,7 @@ def main():
 
     print(f"\nPredicted {target}: {result}")
 
-
 if __name__ == "__main__":
     main()
+
 
